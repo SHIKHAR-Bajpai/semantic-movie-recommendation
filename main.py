@@ -6,22 +6,23 @@ from sentence_transformers import SentenceTransformer
 from dotenv import load_dotenv
 load_dotenv()
 
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+# client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
+# use this for using local model for embedding
 model = SentenceTransformer(
     "BAAI/bge-base-en-v1.5"
 )
-
 def get_embeddings(text):
     return model.encode(text)
 
-def get_embeddings_cloud(text):
-    response = client.models.embed_content(
-        model="gemini-embedding-2",
-        contents=text
-    )
+# use this for using gemini-cloud model for embedding 
+# def get_embeddings_cloud(text):
+#     response = client.models.embed_content(
+#         model="gemini-embedding-2",
+#         contents=text
+#     )
 
-    return response.embeddings[0].values
+#     return response.embeddings[0].values
 
 def cosine_sim(a,b):
     return np.dot(a,b) / (np.linalg.norm(a) * np.linalg.norm(b))
@@ -59,7 +60,7 @@ else:
 
 def recommend():
 
-    query = input("\nEnter your types and mood for a movie: ")
+    query = input("\nEnter your genre or mood for a movie: ")
     results = search(query)
     results = sorted(results, key=lambda x: x[1], reverse=True)
 
